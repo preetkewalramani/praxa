@@ -1,0 +1,8 @@
+{
+  "extends": "@praxa/tsconfig/react.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "tsBuildInfoFile": "tsconfig.tsbuildinfo"
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx"]
+}

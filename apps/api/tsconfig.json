@@ -1,0 +1,15 @@
+{
+  "extends": "@praxa/tsconfig/nest.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "outDir": "dist",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+    "rootDir": "src",
+    "tsBuildInfoFile": "tsconfig.tsbuildinfo"
+  },
+  "include": ["src/**/*.ts"]
+}
