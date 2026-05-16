@@ -1,33 +1,35 @@
 import {
-  ArgumentsHost,
   Catch,
   HttpException,
   HttpStatus,
+  type ArgumentsHost,
   type ExceptionFilter,
 } from '@nestjs/common';
 import { type Response } from 'express';
 
-interface StandardErrorResponse {
-  success: false;
-  error: {
-    code: string;
-    message: string;
-  };
+import { RequestContextService } from '../../shared/context/request-context.service';
+import { buildErrorResponse } from '../../shared/response/response.builder';
+import { BaseAppException, type AppExceptionResponse } from '../exceptions';
+
+interface NestHttpExceptionResponse {
+  error?: string;
+  message?: string | string[];
+  statusCode?: number;
 }
 
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
+  constructor(private readonly requestContext: RequestContextService) {}
+
   catch(exception: unknown, host: ArgumentsHost): void {
     const response = host.switchToHttp().getResponse<Response>();
     const statusCode = this.resolveStatusCode(exception);
 
-    response.status(statusCode).json({
-      success: false,
-      error: {
-        code: this.resolveErrorCode(exception),
-        message: this.resolveErrorMessage(exception),
-      },
-    } satisfies StandardErrorResponse);
+    response.status(statusCode).json(
+      buildErrorResponse(this.resolveError(exception, statusCode), {
+        correlationId: this.requestContext.getCorrelationId(),
+      }),
+    );
   }
 
   private resolveStatusCode(exception: unknown): number {
@@ -38,32 +40,58 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     return HttpStatus.INTERNAL_SERVER_ERROR;
   }
 
-  private resolveErrorCode(exception: unknown): string {
-    if (exception instanceof HttpException) {
-      return exception.name;
-    }
+  private resolveError(exception: unknown, statusCode: number): AppExceptionResponse {
+    if (exception instanceof BaseAppException) {
+      const response = exception.getResponse();
 
-    return 'InternalServerError';
-  }
-
-  private resolveErrorMessage(exception: unknown): string {
-    if (exception instanceof HttpException) {
-      const exceptionResponse = exception.getResponse();
-
-      if (typeof exceptionResponse === 'string') {
-        return exceptionResponse;
-      }
-
-      if (this.hasMessage(exceptionResponse)) {
-        return this.normalizeMessage(exceptionResponse.message);
+      if (this.isAppExceptionResponse(response)) {
+        return response;
       }
     }
 
-    return 'Internal server error';
+    if (exception instanceof HttpException) {
+      const response = exception.getResponse();
+
+      if (typeof response === 'string') {
+        return {
+          code: exception.name,
+          message: response,
+        };
+      }
+
+      if (this.isNestHttpExceptionResponse(response)) {
+        return {
+          code: response.error ?? exception.name,
+          details: response,
+          message: this.normalizeMessage(response.message ?? exception.message),
+        };
+      }
+
+      return {
+        code: exception.name,
+        message: exception.message,
+      };
+    }
+
+    return {
+      code: HttpStatus[statusCode] ?? 'InternalServerError',
+      message: 'Internal server error',
+    };
   }
 
-  private hasMessage(value: unknown): value is { message: string | string[] } {
-    return typeof value === 'object' && value !== null && 'message' in value;
+  private isAppExceptionResponse(value: unknown): value is AppExceptionResponse {
+    return (
+      typeof value === 'object' &&
+      value !== null &&
+      'code' in value &&
+      'message' in value &&
+      typeof value.code === 'string' &&
+      typeof value.message === 'string'
+    );
+  }
+
+  private isNestHttpExceptionResponse(value: unknown): value is NestHttpExceptionResponse {
+    return typeof value === 'object' && value !== null;
   }
 
   private normalizeMessage(message: string | string[]): string {

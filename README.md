@@ -6,7 +6,7 @@ Praxa is a production-grade SaaS monorepo foundation built with Turborepo, PNPM 
 
 ```text
 apps/
-  api/        NestJS API application
+  api/        NestJS API application with core/common/shared backend architecture
   web/        React + Vite web application
 packages/
   shared-types/  Shared DTO, API response, and pagination types
@@ -53,6 +53,10 @@ pnpm dev
 
 - Web: <http://localhost:5173>
 - API health check: <http://localhost:3000/api/v1/health>
+
+## Backend core architecture
+
+The API app is organized into layered `core/`, `common/`, `shared/`, and `modules/` areas. The foundation includes centralized typed configuration, Pino JSON logging, request correlation context, standardized response/error shapes, health monitoring, cache/event/queue/repository abstractions, guard/decorator scaffolds, Swagger at `/docs`, secure headers, CORS, compression, throttling, and a hardened global validation pipe.
 
 ## Available scripts
 
