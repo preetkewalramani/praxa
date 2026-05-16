@@ -1,7 +1,13 @@
 import { Injectable, Logger } from '@nestjs/common';
 
+import { RequestContextService } from './context/request-context.service';
+
 @Injectable()
 export class StructuredLogger extends Logger {
+  constructor(private readonly requestContext: RequestContextService) {
+    super();
+  }
+
   override log(message: string, context?: string): void {
     super.log(this.formatMessage(message, context));
   }
@@ -23,6 +29,11 @@ export class StructuredLogger extends Logger {
   }
 
   private formatMessage(message: string, context?: string): string {
-    return JSON.stringify({ context, message, timestamp: new Date().toISOString() });
+    return JSON.stringify({
+      context,
+      message,
+      requestId: this.requestContext.getRequestId(),
+      timestamp: new Date().toISOString(),
+    });
   }
 }

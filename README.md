@@ -10,6 +10,8 @@ apps/
   web/        React + Vite web application
 packages/
   shared-types/  Shared DTO, API response, and pagination types
+  constants/     Shared app names, API prefixes, env keys, and enum placeholders
+  env/           Shared environment contracts and validation helpers
   eslint-config/ Reusable ESLint flat configs
   tsconfig/      Reusable strict TypeScript configs
   ui/            Placeholder UI package
@@ -50,7 +52,7 @@ pnpm dev
 ```
 
 - Web: <http://localhost:5173>
-- API health check: <http://localhost:3000/api/health>
+- API health check: <http://localhost:3000/api/v1/health>
 
 ## Available scripts
 
@@ -69,7 +71,7 @@ pnpm dev
 4. Run `pnpm dev` to start the API and web app together.
 5. Keep changes formatted, linted, and type-safe before committing.
 
-Husky hooks are configured to run lint-staged formatting/linting plus repository type checks before commits. Commit messages are validated with Commitlint conventional commit rules.
+Husky hooks are configured to run lint-staged formatting/linting plus repository type checks before commits. Commit messages are validated with Commitlint conventional commit rules. VS Code workspace recommendations are included for ESLint, Prettier, and workspace TypeScript usage.
 
 ## Environment variables
 
@@ -84,4 +86,4 @@ Husky hooks are configured to run lint-staged formatting/linting plus repository
 
 ## Notes
 
-This foundation intentionally excludes business logic, authentication, database schemas, RBAC, multi-tenancy, production deployment workflows, and feature modules. It is ready for incremental product implementation on top of the established monorepo architecture.
+This foundation intentionally excludes business logic, authentication, database schemas, RBAC, multi-tenancy, production deployment workflows, and feature modules. It includes scaffolds for centralized environment validation, API constants, request correlation IDs, URI API versioning, global API error formatting, TanStack Query, and frontend error boundaries so product work can start on a hardened base.

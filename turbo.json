@@ -1,21 +1,29 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": [".env", ".env.local", ".env.example", "tsconfig.base.json"],
+  "globalEnv": ["NODE_ENV", "API_PORT", "WEB_PORT", "DATABASE_URL", "REDIS_HOST", "REDIS_PORT"],
   "tasks": {
     "build": {
+      "cache": true,
       "dependsOn": ["^build"],
-      "outputs": ["dist/**", "build/**", ".vite/**"]
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": ["dist/**", "build/**", ".vite/**", "!.vite/cache/**", "tsconfig.tsbuildinfo"]
     },
     "dev": {
       "cache": false,
-      "persistent": true
+      "persistent": true,
+      "dependsOn": ["^build"],
+      "outputs": []
     },
     "lint": {
+      "cache": true,
       "dependsOn": ["^build"],
       "outputs": []
     },
     "typecheck": {
+      "cache": true,
       "dependsOn": ["^build"],
-      "outputs": ["tsconfig.tsbuildinfo"]
+      "outputs": ["tsconfig.tsbuildinfo", "*.tsbuildinfo"]
     }
   }
 }
