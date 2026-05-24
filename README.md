@@ -91,3 +91,14 @@ Husky hooks are configured to run lint-staged formatting/linting plus repository
 ## Notes
 
 This foundation intentionally excludes business logic, authentication, database schemas, RBAC, multi-tenancy, production deployment workflows, and feature modules. It includes scaffolds for centralized environment validation, API constants, request correlation IDs, URI API versioning, global API error formatting, TanStack Query, and frontend error boundaries so product work can start on a hardened base.
+
+## Authentication and RBAC
+
+Praxa API now includes tenant-aware authentication and RBAC scaffolding under `apps/api/src/modules/auth`.
+
+- Access tokens are JWTs (15m) containing user, tenant, session, roles, permissions, and tokenVersion.
+- Refresh tokens are rotated on every refresh and only stored as hashes in sessions.
+- Session lifecycle supports create, validate, revoke, revoke-all, activity updates, and replay-attack revocation path.
+- Roles and permissions are modeled for tenant-safe assignment.
+- Required system roles seeded: `SUPER_ADMIN`, `FIRM_ADMIN`, `MANAGER`, `EMPLOYEE`.
+- Audit events logged for `LOGIN_SUCCESS`, `LOGIN_FAILURE`, `TOKEN_REFRESH`, `LOGOUT`, `SESSION_REVOKED`.

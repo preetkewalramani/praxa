@@ -8,6 +8,7 @@ import { AuthGuard, PermissionsGuard, RolesGuard, TenantGuard } from './common/g
 import { ResponseTransformInterceptor } from './common/interceptors/response-transform.interceptor';
 import { TimeoutInterceptor } from './common/interceptors/timeout.interceptor';
 import { RequestIdMiddleware } from './common/middleware/request-id.middleware';
+import { AuthModule } from './modules/auth/auth.module';
 import { CacheModule } from './core/cache';
 import { CoreConfigModule } from './core/config/config.module';
 import { EventsModule } from './core/events';
@@ -21,6 +22,7 @@ import { RequestContextModule } from './shared/context/request-context.module';
 @Module({
   imports: [
     CoreConfigModule,
+    AuthModule,
     RequestContextModule,
     LoggerModule,
     CacheModule,
