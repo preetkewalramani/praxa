@@ -143,3 +143,12 @@ Praxa API now includes tenant-aware authentication and RBAC scaffolding under `a
 - Category architecture: tenant-scoped service categories with soft-delete-aware CRUD endpoints.
 - Permissions model includes `services.*`, `service-categories.*`, and `service-pricing.*` capabilities through existing RBAC decorators.
 - Frontend module path: `apps/web/src/features/services` with list/details pages, category and pricing hooks/API layers.
+
+## Projects & work orders module
+
+- Backend module path: `apps/api/src/modules/projects` with tenant-safe project, project-service, and work-order APIs.
+- Workflow engine enforces project and work-order status transition policies before state changes are persisted.
+- Pricing snapshot strategy: project service assignment stores `unitPrice` and `totalPrice` from current service price at assignment time.
+- Work order timeline architecture uses `WorkOrderEvent` records for status/assignment lifecycle history.
+- Permissions model includes `projects.*`, `project-services.*`, and `work-orders.*` capabilities via existing RBAC decorators.
+- Frontend module path: `apps/web/src/features/projects` with projects list/details and work-order list scaffolding.

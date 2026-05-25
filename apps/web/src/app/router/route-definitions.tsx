@@ -3,7 +3,9 @@ import { ClientsListPage } from '@/features/clients/pages/ClientsListPage';
 import { ClientDetailsPage } from '@/features/clients/pages/ClientDetailsPage';
 import { DashboardPage } from '@/pages/dashboard/DashboardPage';
 import { InvoicesPage } from '@/pages/dashboard/InvoicesPage';
-import { ProjectsPage } from '@/pages/dashboard/ProjectsPage';
+import { ProjectsListPage } from '@/features/projects/pages/ProjectsListPage';
+import { ProjectDetailsPage } from '@/features/projects/pages/ProjectDetailsPage';
+import { WorkOrdersPage } from '@/features/projects/pages/WorkOrdersPage';
 import { ReportsPage } from '@/pages/dashboard/ReportsPage';
 import { ServicesListPage } from '@/features/services/pages/ServicesListPage';
 import { ServiceDetailsPage } from '@/features/services/pages/ServiceDetailsPage';
@@ -46,7 +48,24 @@ export const appRoutes: AppRouteDefinition[] = [
     requiresAuth: true,
     permissions: ['services.read'],
   },
-  { path: '/projects', element: <ProjectsPage />, requiresAuth: true },
+  {
+    path: '/projects',
+    element: <ProjectsListPage />,
+    requiresAuth: true,
+    permissions: ['projects.read'],
+  },
+  {
+    path: '/projects/:id',
+    element: <ProjectDetailsPage />,
+    requiresAuth: true,
+    permissions: ['projects.read'],
+  },
+  {
+    path: '/work-orders',
+    element: <WorkOrdersPage />,
+    requiresAuth: true,
+    permissions: ['work-orders.read'],
+  },
   { path: '/invoices', element: <InvoicesPage />, requiresAuth: true },
   { path: '/reports', element: <ReportsPage />, requiresAuth: true },
   {
