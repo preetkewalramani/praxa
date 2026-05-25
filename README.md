@@ -108,3 +108,12 @@ Praxa API now includes tenant-aware authentication and RBAC scaffolding under `a
 - Refresh token replay protection revokes compromised session state and emits `TOKEN_REPLAY_DETECTED` audit events.
 - Revoked or expired sessions are denied during JWT strategy validation.
 - Permission resolution now supports cached role-to-permission expansion via the shared cache service with invalidation hooks on role changes.
+
+## Frontend architecture
+
+- Application shell: `AppShell` with header, responsive sidebar, content container, and auth-aware navigation metadata.
+- Design system: MUI theme token architecture (`src/theme`) with light/dark modes and persisted preference toggle.
+- Routing: route definitions with metadata for auth, roles, and permissions plus guard pipeline for protected routes.
+- Data foundation: centralized Axios client with request/response interceptors and TanStack Query provider defaults.
+- Component strategy: shared UI/form/feedback/navigation primitives under `src/components/*` for future Storybook adoption.
+- Error/loading strategy: global app error boundary, route error boundary, and reusable loading/error/empty states.

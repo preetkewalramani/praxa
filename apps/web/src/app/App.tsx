@@ -1,10 +1,8 @@
-import { type JSX } from 'react';
 import { RouterProvider } from 'react-router-dom';
+import { AppProviders } from '@/app/providers/AppProviders';
+import { router } from '@/app/router/router';
 
-import { AppProviders } from '@/providers/AppProviders';
-import { router } from '@/routes/router';
-
-export function App(): JSX.Element {
+export function App() {
   return (
     <AppProviders>
       <RouterProvider router={router} />

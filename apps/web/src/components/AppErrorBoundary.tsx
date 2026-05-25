@@ -1,39 +1,19 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react';
-
-interface AppErrorBoundaryProps {
+import { ErrorState } from './feedback/ErrorState';
+interface Props {
   children: ReactNode;
 }
-
-interface AppErrorBoundaryState {
-  error: Error | null;
+interface State {
+  hasError: boolean;
 }
-
-export class AppErrorBoundary extends Component<AppErrorBoundaryProps, AppErrorBoundaryState> {
-  override state: AppErrorBoundaryState = {
-    error: null,
-  };
-
-  static getDerivedStateFromError(error: Error): AppErrorBoundaryState {
-    return { error };
+export class AppErrorBoundary extends Component<Props, State> {
+  state: State = { hasError: false };
+  static getDerivedStateFromError(): State {
+    return { hasError: true };
   }
-
-  override componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
-    console.error('Praxa web application boundary caught an error.', { error, errorInfo });
-  }
-
-  override render(): ReactNode {
-    if (this.state.error) {
-      return (
-        <main className="app-shell" role="alert">
-          <section className="dashboard-page">
-            <p className="eyebrow">Something went wrong</p>
-            <h1>Praxa is unavailable</h1>
-            <p>Please refresh the page. If the problem persists, contact support.</p>
-          </section>
-        </main>
-      );
-    }
-
+  componentDidCatch(_error: Error, _errorInfo: ErrorInfo): void {}
+  render() {
+    if (this.state.hasError) return <ErrorState message="Unexpected application error." />;
     return this.props.children;
   }
 }
