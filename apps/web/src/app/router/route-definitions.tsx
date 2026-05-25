@@ -5,7 +5,8 @@ import { DashboardPage } from '@/pages/dashboard/DashboardPage';
 import { InvoicesPage } from '@/pages/dashboard/InvoicesPage';
 import { ProjectsPage } from '@/pages/dashboard/ProjectsPage';
 import { ReportsPage } from '@/pages/dashboard/ReportsPage';
-import { ServicesPage } from '@/pages/dashboard/ServicesPage';
+import { ServicesListPage } from '@/features/services/pages/ServicesListPage';
+import { ServiceDetailsPage } from '@/features/services/pages/ServiceDetailsPage';
 import { SettingsPage } from '@/pages/settings/SettingsPage';
 import { AdministrationPage } from '@/pages/system/AdministrationPage';
 import { FirmSettingsPage } from '@/features/administration/pages/FirmSettingsPage';
@@ -33,7 +34,18 @@ export const appRoutes: AppRouteDefinition[] = [
     requiresAuth: true,
     permissions: ['clients.read'],
   },
-  { path: '/services', element: <ServicesPage />, requiresAuth: true },
+  {
+    path: '/services',
+    element: <ServicesListPage />,
+    requiresAuth: true,
+    permissions: ['services.read'],
+  },
+  {
+    path: '/services/:id',
+    element: <ServiceDetailsPage />,
+    requiresAuth: true,
+    permissions: ['services.read'],
+  },
   { path: '/projects', element: <ProjectsPage />, requiresAuth: true },
   { path: '/invoices', element: <InvoicesPage />, requiresAuth: true },
   { path: '/reports', element: <ReportsPage />, requiresAuth: true },

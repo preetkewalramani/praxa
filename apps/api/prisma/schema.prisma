@@ -209,3 +209,62 @@ model ClientTagAssignment {
   @@unique([firmId, clientId, tagId], map: "uq_client_tag_assignments")
   @@map("client_tag_assignments")
 }
+
+
+enum ServiceStatus {
+  ACTIVE
+  INACTIVE
+  ARCHIVED
+}
+
+model ServiceCategory {
+  id          String   @id @default(cuid()) @map("id")
+  firmId      String   @map("firm_id")
+  name        String   @map("name")
+  description String?  @map("description")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  deletedAt   DateTime? @map("deleted_at")
+  services    Service[]
+
+  @@unique([firmId, name], map: "uq_service_categories_firm_name")
+  @@map("service_categories")
+}
+
+model Service {
+  id                     String        @id @default(cuid()) @map("id")
+  firmId                 String        @map("firm_id")
+  categoryId             String        @map("category_id")
+  code                   String        @map("code")
+  name                   String        @map("name")
+  description            String?       @map("description")
+  status                 ServiceStatus @default(ACTIVE) @map("status")
+  defaultDurationMinutes Int           @map("default_duration_minutes")
+  createdBy              String?       @map("created_by")
+  updatedBy              String?       @map("updated_by")
+  createdAt              DateTime      @default(now()) @map("created_at")
+  updatedAt              DateTime      @updatedAt @map("updated_at")
+  deletedAt              DateTime?     @map("deleted_at")
+  category               ServiceCategory @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  prices                 ServicePrice[]
+
+  @@unique([firmId, code], map: "uq_services_firm_code")
+  @@map("services")
+}
+
+model ServicePrice {
+  id            String   @id @default(cuid()) @map("id")
+  firmId        String   @map("firm_id")
+  serviceId     String   @map("service_id")
+  amount        Decimal  @db.Decimal(12, 2) @map("amount")
+  currency      String   @map("currency")
+  effectiveFrom DateTime @map("effective_from")
+  effectiveTo   DateTime? @map("effective_to")
+  isCurrent     Boolean  @default(true) @map("is_current")
+  createdBy     String?  @map("created_by")
+  createdAt     DateTime @default(now()) @map("created_at")
+  service       Service  @relation(fields: [serviceId], references: [id], onDelete: Restrict)
+
+  @@index([firmId, serviceId, isCurrent], map: "idx_service_prices_current")
+  @@map("service_prices")
+}

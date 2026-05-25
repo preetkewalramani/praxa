@@ -134,3 +134,12 @@ Praxa API now includes tenant-aware authentication and RBAC scaffolding under `a
 - Tagging architecture: dedicated tag entity plus assignment join model with assign/remove APIs.
 - Permissions model includes `clients.*` and `client-tags.*` capabilities enforced through existing RBAC decorators.
 - Frontend module path: `apps/web/src/features/clients` with list/details pages, API clients, and React Query hooks.
+
+## Service catalog module
+
+- Backend module path: `apps/api/src/modules/services` with tenant-safe service, category, and pricing APIs.
+- Service lifecycle: create -> update -> archive (soft delete) -> restore with audit events.
+- Pricing lifecycle: current price closure (`effectiveTo`, `isCurrent=false`) followed by immutable new current price creation.
+- Category architecture: tenant-scoped service categories with soft-delete-aware CRUD endpoints.
+- Permissions model includes `services.*`, `service-categories.*`, and `service-pricing.*` capabilities through existing RBAC decorators.
+- Frontend module path: `apps/web/src/features/services` with list/details pages, category and pricing hooks/API layers.
