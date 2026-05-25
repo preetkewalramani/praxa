@@ -12,6 +12,9 @@ model Firm {
   name       String    @map("name")
   slug       String    @unique @map("slug")
   status     String    @default("ACTIVE") @map("status")
+  logoUrl    String?   @map("logo_url")
+  timezone   String?   @map("timezone")
+  currency   String?   @map("currency")
   createdAt  DateTime  @default(now()) @map("created_at")
   updatedAt  DateTime  @updatedAt @map("updated_at")
   users      User[]
@@ -67,6 +70,7 @@ model Role {
   firm        Firm             @relation(fields: [firmId], references: [id], onDelete: Restrict)
   userRoles   UserRole[]
   permissions RolePermission[]
+  invitations Invitation[]
 
   @@unique([firmId, name], map: "uq_roles_firm_name")
   @@map("roles")
@@ -129,4 +133,22 @@ model Session {
   user             User     @relation(fields: [userId], references: [id], onDelete: Restrict)
 
   @@map("sessions")
+}
+
+
+model Invitation {
+  id        String    @id @default(cuid()) @map("id")
+  firmId    String    @map("firm_id")
+  email     String    @map("email")
+  roleId    String    @map("role_id")
+  tokenHash String    @map("token_hash")
+  expiresAt DateTime  @map("expires_at")
+  acceptedAt DateTime? @map("accepted_at")
+  revokedAt DateTime? @map("revoked_at")
+  createdBy String?   @map("created_by")
+  createdAt DateTime  @default(now()) @map("created_at")
+  role      Role      @relation(fields: [roleId], references: [id], onDelete: Restrict)
+
+  @@index([firmId, email], map: "idx_invitations_firm_email")
+  @@map("invitations")
 }

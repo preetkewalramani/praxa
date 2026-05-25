@@ -117,3 +117,12 @@ Praxa API now includes tenant-aware authentication and RBAC scaffolding under `a
 - Data foundation: centralized Axios client with request/response interceptors and TanStack Query provider defaults.
 - Component strategy: shared UI/form/feedback/navigation primitives under `src/components/*` for future Storybook adoption.
 - Error/loading strategy: global app error boundary, route error boundary, and reusable loading/error/empty states.
+
+## Administration module
+
+- Backend module path: `apps/api/src/modules/administration`.
+- APIs include tenant-safe user management, invitation lifecycle scaffolding, role assignment/removal, and firm profile management under `/api/v1/admin/*`.
+- Invitation workflow: user create -> invitation token scaffold generation -> accept endpoint activation and audit event.
+- Role assignment workflow: assign/remove endpoints with RBAC permission decorators and audit event emission.
+- Firm management workflow: read/update firm profile fields (`name`, `logoUrl`, `timezone`, `currency`) with audit logging.
+- Frontend module path: `apps/web/src/features/administration` with users, invitations, and firm pages plus React Query hooks and axios API clients.

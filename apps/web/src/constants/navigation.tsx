@@ -1,20 +1,21 @@
-import { type ReactNode } from 'react';
+import AssessmentOutlined from '@mui/icons-material/AssessmentOutlined';
+import BuildOutlined from '@mui/icons-material/BuildOutlined';
 import DashboardOutlined from '@mui/icons-material/DashboardOutlined';
 import GroupsOutlined from '@mui/icons-material/GroupsOutlined';
-import BuildOutlined from '@mui/icons-material/BuildOutlined';
-import WorkOutline from '@mui/icons-material/WorkOutline';
 import ReceiptLongOutlined from '@mui/icons-material/ReceiptLongOutlined';
-import AssessmentOutlined from '@mui/icons-material/AssessmentOutlined';
 import SettingsOutlined from '@mui/icons-material/SettingsOutlined';
 import ShieldOutlined from '@mui/icons-material/ShieldOutlined';
+import WorkOutline from '@mui/icons-material/WorkOutline';
+import { type ReactNode } from 'react';
 
 export interface NavItemDef {
+  icon: ReactNode;
   label: string;
   path: string;
   permissions?: string[];
   roles?: string[];
-  icon: ReactNode;
 }
+
 export const NAV_ITEMS: NavItemDef[] = [
   { label: 'Dashboard', path: '/', icon: <DashboardOutlined /> },
   { label: 'Clients', path: '/clients', icon: <GroupsOutlined /> },
@@ -33,5 +34,23 @@ export const NAV_ITEMS: NavItemDef[] = [
     path: '/administration',
     icon: <ShieldOutlined />,
     roles: ['SUPER_ADMIN', 'FIRM_ADMIN'],
+  },
+  {
+    label: 'Admin Users',
+    path: '/admin/users',
+    icon: <ShieldOutlined />,
+    permissions: ['users.read'],
+  },
+  {
+    label: 'Admin Invitations',
+    path: '/admin/invitations',
+    icon: <ShieldOutlined />,
+    permissions: ['invitations.read'],
+  },
+  {
+    label: 'Admin Firm',
+    path: '/admin/firm',
+    icon: <ShieldOutlined />,
+    permissions: ['firm.read'],
   },
 ];

@@ -9,6 +9,7 @@ import { ResponseTransformInterceptor } from './common/interceptors/response-tra
 import { TimeoutInterceptor } from './common/interceptors/timeout.interceptor';
 import { RequestIdMiddleware } from './common/middleware/request-id.middleware';
 import { AuthModule } from './modules/auth/auth.module';
+import { AdministrationModule } from './modules/administration/administration.module';
 import { CacheModule } from './core/cache';
 import { CoreConfigModule } from './core/config/config.module';
 import { EventsModule } from './core/events';
@@ -23,6 +24,7 @@ import { RequestContextModule } from './shared/context/request-context.module';
   imports: [
     CoreConfigModule,
     AuthModule,
+    AdministrationModule,
     RequestContextModule,
     LoggerModule,
     CacheModule,

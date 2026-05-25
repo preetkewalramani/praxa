@@ -1,5 +1,4 @@
 import { type ReactNode } from 'react';
-import { AdministrationPage } from '@/pages/system/AdministrationPage';
 import { ClientsPage } from '@/pages/dashboard/ClientsPage';
 import { DashboardPage } from '@/pages/dashboard/DashboardPage';
 import { InvoicesPage } from '@/pages/dashboard/InvoicesPage';
@@ -7,6 +6,10 @@ import { ProjectsPage } from '@/pages/dashboard/ProjectsPage';
 import { ReportsPage } from '@/pages/dashboard/ReportsPage';
 import { ServicesPage } from '@/pages/dashboard/ServicesPage';
 import { SettingsPage } from '@/pages/settings/SettingsPage';
+import { AdministrationPage } from '@/pages/system/AdministrationPage';
+import { FirmSettingsPage } from '@/features/administration/pages/FirmSettingsPage';
+import { InvitationsPage } from '@/features/administration/pages/InvitationsPage';
+import { UsersPage } from '@/features/administration/pages/UsersPage';
 
 export interface AppRouteDefinition {
   path: string;
@@ -33,5 +36,18 @@ export const appRoutes: AppRouteDefinition[] = [
     element: <AdministrationPage />,
     requiresAuth: true,
     roles: ['SUPER_ADMIN', 'FIRM_ADMIN'],
+  },
+  { path: '/admin/users', element: <UsersPage />, requiresAuth: true, permissions: ['users.read'] },
+  {
+    path: '/admin/invitations',
+    element: <InvitationsPage />,
+    requiresAuth: true,
+    permissions: ['invitations.read'],
+  },
+  {
+    path: '/admin/firm',
+    element: <FirmSettingsPage />,
+    requiresAuth: true,
+    permissions: ['firm.read'],
   },
 ];
