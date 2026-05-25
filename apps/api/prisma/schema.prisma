@@ -152,3 +152,60 @@ model Invitation {
   @@index([firmId, email], map: "idx_invitations_firm_email")
   @@map("invitations")
 }
+
+
+enum ClientStatus {
+  ACTIVE
+  INACTIVE
+  PROSPECT
+  ARCHIVED
+}
+
+model Client {
+  id          String       @id @default(cuid()) @map("id")
+  firmId      String       @map("firm_id")
+  firstName   String       @map("first_name")
+  lastName    String       @map("last_name")
+  companyName String       @map("company_name")
+  email       String       @map("email")
+  phone       String       @map("phone")
+  status      ClientStatus @default(ACTIVE) @map("status")
+  notes       String?      @map("notes")
+  createdBy   String?      @map("created_by")
+  updatedBy   String?      @map("updated_by")
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+  deletedAt   DateTime?    @map("deleted_at")
+  tagLinks    ClientTagAssignment[]
+
+  @@index([firmId, email], map: "idx_clients_firm_email")
+  @@index([firmId, companyName], map: "idx_clients_firm_company")
+  @@map("clients")
+}
+
+model ClientTag {
+  id        String   @id @default(cuid()) @map("id")
+  firmId    String   @map("firm_id")
+  name      String   @map("name")
+  color     String   @map("color")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+  links     ClientTagAssignment[]
+
+  @@unique([firmId, name], map: "uq_client_tags_firm_name")
+  @@map("client_tags")
+}
+
+model ClientTagAssignment {
+  id        String   @id @default(cuid()) @map("id")
+  firmId    String   @map("firm_id")
+  clientId  String   @map("client_id")
+  tagId     String   @map("tag_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  client    Client   @relation(fields: [clientId], references: [id], onDelete: Restrict)
+  tag       ClientTag @relation(fields: [tagId], references: [id], onDelete: Restrict)
+
+  @@unique([firmId, clientId, tagId], map: "uq_client_tag_assignments")
+  @@map("client_tag_assignments")
+}

@@ -126,3 +126,11 @@ Praxa API now includes tenant-aware authentication and RBAC scaffolding under `a
 - Role assignment workflow: assign/remove endpoints with RBAC permission decorators and audit event emission.
 - Firm management workflow: read/update firm profile fields (`name`, `logoUrl`, `timezone`, `currency`) with audit logging.
 - Frontend module path: `apps/web/src/features/administration` with users, invitations, and firm pages plus React Query hooks and axios API clients.
+
+## Client management module
+
+- Backend module path: `apps/api/src/modules/clients` with tenant-safe client and client-tag APIs.
+- Client lifecycle: create -> update -> archive (soft delete) -> restore with audit events.
+- Tagging architecture: dedicated tag entity plus assignment join model with assign/remove APIs.
+- Permissions model includes `clients.*` and `client-tags.*` capabilities enforced through existing RBAC decorators.
+- Frontend module path: `apps/web/src/features/clients` with list/details pages, API clients, and React Query hooks.

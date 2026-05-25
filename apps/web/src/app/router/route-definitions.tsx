@@ -1,5 +1,6 @@
 import { type ReactNode } from 'react';
-import { ClientsPage } from '@/pages/dashboard/ClientsPage';
+import { ClientsListPage } from '@/features/clients/pages/ClientsListPage';
+import { ClientDetailsPage } from '@/features/clients/pages/ClientDetailsPage';
 import { DashboardPage } from '@/pages/dashboard/DashboardPage';
 import { InvoicesPage } from '@/pages/dashboard/InvoicesPage';
 import { ProjectsPage } from '@/pages/dashboard/ProjectsPage';
@@ -20,7 +21,18 @@ export interface AppRouteDefinition {
 }
 export const appRoutes: AppRouteDefinition[] = [
   { path: '/', element: <DashboardPage />, requiresAuth: true },
-  { path: '/clients', element: <ClientsPage />, requiresAuth: true },
+  {
+    path: '/clients',
+    element: <ClientsListPage />,
+    requiresAuth: true,
+    permissions: ['clients.read'],
+  },
+  {
+    path: '/clients/:id',
+    element: <ClientDetailsPage />,
+    requiresAuth: true,
+    permissions: ['clients.read'],
+  },
   { path: '/services', element: <ServicesPage />, requiresAuth: true },
   { path: '/projects', element: <ProjectsPage />, requiresAuth: true },
   { path: '/invoices', element: <InvoicesPage />, requiresAuth: true },
