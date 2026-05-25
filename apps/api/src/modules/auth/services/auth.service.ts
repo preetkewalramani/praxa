@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+
 import { UnauthorizedException } from '../../../common/exceptions';
 import { RequestContextService } from '../../../shared/context/request-context.service';
 import { AUTH_AUDIT_ACTIONS } from '../constants/auth.constants';
@@ -71,13 +72,33 @@ export class AuthService {
 
   async refresh(input: RefreshDto) {
     const firmId = this.requireFirmId();
-    const valid = await this.sessionService.validateSession(
+    const state = await this.sessionService.validateSession(
       firmId,
       input.sessionId,
       input.refreshToken,
     );
-    if (!valid) {
+    if (state !== 'valid') {
       await this.sessionService.revokeSession(firmId, input.sessionId);
+
+      if (state === 'replay') {
+        const session = await this.sessionService.getSessionWithUser(firmId, input.sessionId);
+        if (session) {
+          await this.sessionService.revokeAllSessions(firmId, session.userId);
+          await this.authRepository.createAuditLog(
+            firmId,
+            session.userId,
+            AUTH_AUDIT_ACTIONS.tokenReplayDetected,
+            { sessionId: input.sessionId },
+          );
+        }
+      }
+
+      await this.authRepository.createAuditLog(
+        firmId,
+        input.sessionId,
+        AUTH_AUDIT_ACTIONS.sessionRevoked,
+        { sessionId: input.sessionId },
+      );
       throw new UnauthorizedException('Invalid refresh token');
     }
 
@@ -116,6 +137,9 @@ export class AuthService {
     const firmId = this.requireFirmId();
     await this.sessionService.revokeSession(firmId, sessionId);
     await this.authRepository.createAuditLog(firmId, sessionId, AUTH_AUDIT_ACTIONS.logout, {
+      sessionId,
+    });
+    await this.authRepository.createAuditLog(firmId, sessionId, AUTH_AUDIT_ACTIONS.sessionRevoked, {
       sessionId,
     });
   }

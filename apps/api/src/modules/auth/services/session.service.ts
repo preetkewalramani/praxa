@@ -23,16 +23,20 @@ export class SessionService {
     });
   }
 
-  async validateSession(firmId: string, sessionId: string, refreshToken: string): Promise<boolean> {
+  async validateSession(
+    firmId: string,
+    sessionId: string,
+    refreshToken: string,
+  ): Promise<'valid' | 'replay' | 'invalid'> {
     const session = await this.sessions.findById(firmId, sessionId);
 
-    if (!session || session.isRevoked || session.expiresAt.getTime() < Date.now()) return false;
+    if (!session || session.isRevoked || session.expiresAt.getTime() < Date.now()) return 'invalid';
 
     const stored = Buffer.from(session.refreshTokenHash);
     const incoming = Buffer.from(this.hashToken(refreshToken));
-    if (stored.length !== incoming.length) return false;
+    if (stored.length !== incoming.length) return 'replay';
 
-    return timingSafeEqual(stored, incoming);
+    return timingSafeEqual(stored, incoming) ? 'valid' : 'replay';
   }
 
   getSessionWithUser(firmId: string, sessionId: string) {

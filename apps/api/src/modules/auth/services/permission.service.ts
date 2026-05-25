@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 
-import { PermissionRepository } from '../repositories/permission.repository';
+import { PermissionResolverService } from './permission-resolver.service';
 
 @Injectable()
 export class PermissionService {
-  constructor(private readonly permissions: PermissionRepository) {}
+  constructor(private readonly permissionResolver: PermissionResolverService) {}
 
   resolvePermissions(firmId: string, roles: string[]): Promise<string[]> {
-    return this.permissions.resolvePermissions(firmId, roles);
+    return this.permissionResolver.resolvePermissions(firmId, roles);
   }
 
   hasPermission(userPermissions: string[], required: string): boolean {

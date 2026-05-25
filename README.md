@@ -102,3 +102,9 @@ Praxa API now includes tenant-aware authentication and RBAC scaffolding under `a
 - Roles and permissions are modeled for tenant-safe assignment.
 - Required system roles seeded: `SUPER_ADMIN`, `FIRM_ADMIN`, `MANAGER`, `EMPLOYEE`.
 - Audit events logged for `LOGIN_SUCCESS`, `LOGIN_FAILURE`, `TOKEN_REFRESH`, `LOGOUT`, `SESSION_REVOKED`.
+
+### Auth hardening updates
+
+- Refresh token replay protection revokes compromised session state and emits `TOKEN_REPLAY_DETECTED` audit events.
+- Revoked or expired sessions are denied during JWT strategy validation.
+- Permission resolution now supports cached role-to-permission expansion via the shared cache service with invalidation hooks on role changes.

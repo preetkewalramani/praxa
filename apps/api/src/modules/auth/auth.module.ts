@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 
+import { CacheModule } from '../../core/cache';
 import { AuthController } from './controllers/auth.controller';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { PermissionsGuard } from './guards/permissions.guard';
@@ -13,6 +14,7 @@ import { RoleRepository } from './repositories/role.repository';
 import { SessionRepository } from './repositories/session.repository';
 import { AuthService } from './services/auth.service';
 import { PasswordService } from './services/password.service';
+import { PermissionResolverService } from './services/permission-resolver.service';
 import { PermissionService } from './services/permission.service';
 import { RoleService } from './services/role.service';
 import { SessionService } from './services/session.service';
@@ -23,7 +25,11 @@ import { RefreshTokenStrategy } from './strategies/refresh-token.strategy';
 @Module({
   controllers: [AuthController],
   exports: [AuthService, PermissionService, RoleService],
-  imports: [JwtModule.register({}), PassportModule.register({ defaultStrategy: 'jwt' })],
+  imports: [
+    CacheModule,
+    JwtModule.register({}),
+    PassportModule.register({ defaultStrategy: 'jwt' }),
+  ],
   providers: [
     AuthRepository,
     AuthService,
@@ -31,6 +37,7 @@ import { RefreshTokenStrategy } from './strategies/refresh-token.strategy';
     JwtStrategy,
     PasswordService,
     PermissionRepository,
+    PermissionResolverService,
     PermissionService,
     PermissionsGuard,
     RefreshTokenStrategy,

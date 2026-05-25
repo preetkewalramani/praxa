@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 
+import { ForbiddenException } from '../../../common/exceptions';
+
 @Injectable()
 export class RoleRepository {
   private readonly prisma = new PrismaClient();
@@ -12,6 +14,15 @@ export class RoleRepository {
   }
 
   async assignRole(firmId: string, userId: string, roleId: string): Promise<void> {
+    const [user, role] = await Promise.all([
+      this.prisma.user.findFirst({ where: { firmId, id: userId } }),
+      this.prisma.role.findFirst({ where: { firmId, id: roleId } }),
+    ]);
+
+    if (!user || !role) {
+      throw new ForbiddenException('Cross-tenant role assignment is forbidden');
+    }
+
     await this.prisma.userRole.create({ data: { firmId, roleId, userId } });
   }
 
