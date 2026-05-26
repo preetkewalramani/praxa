@@ -152,3 +152,11 @@ Praxa API now includes tenant-aware authentication and RBAC scaffolding under `a
 - Work order timeline architecture uses `WorkOrderEvent` records for status/assignment lifecycle history.
 - Permissions model includes `projects.*`, `project-services.*`, and `work-orders.*` capabilities via existing RBAC decorators.
 - Frontend module path: `apps/web/src/features/projects` with projects list/details and work-order list scaffolding.
+
+## Billing Architecture
+
+- Billing module (`apps/api/src/modules/billing`) provides invoice lifecycle, invoice lines, payment recording, and backend-owned balance calculations.
+- Invoice status lifecycle: `DRAFT -> ISSUED -> PARTIALLY_PAID/PAID`, and cancellation before payment.
+- Financial calculations are backend-only: `subtotal`, `total_amount`, `amount_paid`, and `amount_due` are recalculated server-side.
+- Invoice numbering strategy uses `INV-YYYY-XXXXXX` pattern with tenant-safe uniqueness constraints in schema.
+- Frontend billing feature (`apps/web/src/features/billing`) provides list/details screens and payment recording hooks aligned to RBAC permissions.

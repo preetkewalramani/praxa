@@ -2,7 +2,8 @@ import { type ReactNode } from 'react';
 import { ClientsListPage } from '@/features/clients/pages/ClientsListPage';
 import { ClientDetailsPage } from '@/features/clients/pages/ClientDetailsPage';
 import { DashboardPage } from '@/pages/dashboard/DashboardPage';
-import { InvoicesPage } from '@/pages/dashboard/InvoicesPage';
+import { InvoicesListPage } from '@/features/billing/pages/InvoicesListPage';
+import { InvoiceDetailsPage } from '@/features/billing/pages/InvoiceDetailsPage';
 import { ProjectsListPage } from '@/features/projects/pages/ProjectsListPage';
 import { ProjectDetailsPage } from '@/features/projects/pages/ProjectDetailsPage';
 import { WorkOrdersPage } from '@/features/projects/pages/WorkOrdersPage';
@@ -66,7 +67,8 @@ export const appRoutes: AppRouteDefinition[] = [
     requiresAuth: true,
     permissions: ['work-orders.read'],
   },
-  { path: '/invoices', element: <InvoicesPage />, requiresAuth: true },
+  { path: '/invoices', element: <InvoicesListPage />, requiresAuth: true, permissions: ['billing.read'] },
+  { path: '/invoices/:id', element: <InvoiceDetailsPage />, requiresAuth: true, permissions: ['billing.read'] },
   { path: '/reports', element: <ReportsPage />, requiresAuth: true },
   {
     path: '/settings',

@@ -13,6 +13,7 @@ import { AdministrationModule } from './modules/administration/administration.mo
 import { ClientsModule } from './modules/clients/clients.module';
 import { ServicesModule } from './modules/services/services.module';
 import { ProjectsModule } from './modules/projects/projects.module';
+import { BillingModule } from './modules/billing/billing.module';
 import { CacheModule } from './core/cache';
 import { CoreConfigModule } from './core/config/config.module';
 import { EventsModule } from './core/events';
@@ -31,6 +32,7 @@ import { RequestContextModule } from './shared/context/request-context.module';
     ClientsModule,
     ServicesModule,
     ProjectsModule,
+    BillingModule,
     RequestContextModule,
     LoggerModule,
     CacheModule,
