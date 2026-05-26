@@ -1,0 +1,15 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "never"
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "eslint.experimental.useFlatConfig": true,
+  "eslint.packageManager": "pnpm",
+  "eslint.workingDirectories": [{ "mode": "auto" }],
+  "files.eol": "\n",
+  "prettier.requireConfig": true,
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "typescript.tsdk": "node_modules/typescript/lib"
+}
